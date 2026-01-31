@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Part } from "../lib/types";
-import { calcCG } from "../lib/calc";
-import { RocketViz } from "../components/RocketViz";
-import { calcCPApprox, staticMarginCalibers } from "../lib/stability";
-import { DesignRevision, Geom, loadRevisions, saveRevisions } from "../lib/revision";
+import { Part } from "@/lib/types";
+import { calcCG } from "@/lib/calc";
+import { RocketViz } from "@/components/RocketViz";
+import { calcCPApprox, staticMarginCalibers } from "@/lib/stability";
+import { DesignRevision, Geom, loadRevisions, saveRevisions } from "@/lib/revision";
 
 function uid() {
   return Math.random().toString(36).slice(2, 10) + "-" + Date.now().toString(36);
