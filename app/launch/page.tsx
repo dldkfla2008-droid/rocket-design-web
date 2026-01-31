@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { loadRevisions, DesignRevision } from "../../lib/revision";
-import { LaunchLog, loadLaunchLogs, saveLaunchLogs } from "../../lib/launch";
+import { loadRevisions, DesignRevision } from "@/lib/revision";
+import { LaunchLog, loadLaunchLogs, saveLaunchLogs } from "@/lib/launch";
 
 function uid() {
   return Math.random().toString(36).slice(2, 10) + "-" + Date.now().toString(36);

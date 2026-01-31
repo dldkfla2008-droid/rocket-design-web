@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { simulate1D, ThrustPoint } from "../../lib/simulate";
+import { simulate1D, ThrustPoint } from "@/lib/simulate";
 
 export default function SimulatePage() {
   const [thrust, setThrust] = useState<ThrustPoint[]>([]);
