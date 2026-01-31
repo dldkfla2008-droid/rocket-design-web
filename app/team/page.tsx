@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -18,7 +16,7 @@ export default function TeamPage() {
   const [teamName, setTeamName] = useState("");
   const [joinCode, setJoinCode] = useState("");
 
-  // ✅ 핵심: supabase를 브라우저에서만 동적 import
+  // ✅ 브라우저에서만 supabase 로딩
   useEffect(() => {
     (async () => {
       const mod = await import("@/lib/supabaseClient");
@@ -26,12 +24,11 @@ export default function TeamPage() {
     })();
   }, []);
 
-  // ✅ supabase가 준비되면 auth 상태 구독
+  // ✅ auth 구독
   useEffect(() => {
     if (!supabase) return;
 
     supabase.auth.getUser().then(({ data }: any) => setUser(data.user ?? null));
-
     const { data: sub } = supabase.auth.onAuthStateChange((_e: any, session: any) => {
       setUser(session?.user ?? null);
     });
@@ -39,9 +36,9 @@ export default function TeamPage() {
     return () => sub.subscription.unsubscribe();
   }, [supabase]);
 
+  // ✅ 팀 로드
   useEffect(() => {
-    if (!supabase) return;
-    if (!user) return;
+    if (!supabase || !user) return;
     loadTeams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supabase, user]);
@@ -62,15 +59,12 @@ export default function TeamPage() {
   }
 
   async function signIn() {
-    if (!supabase) return alert("Supabase 아직 준비 중");
+    if (!supabase) return alert("Supabase 준비 중…");
     if (!email.trim()) return;
 
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: {
-        // 배포해도 동작하게: 현재 origin 기준으로 /team으로 복귀
-        emailRedirectTo: `${window.location.origin}/team`,
-      },
+      options: { emailRedirectTo: `${window.location.origin}/team` },
     });
 
     if (error) alert(error.message);
@@ -78,7 +72,6 @@ export default function TeamPage() {
   }
 
   function devLogin() {
-    // 개발용: Supabase 없이 UI 테스트
     setUser({ id: "dev-user", email: "dev@local" });
   }
 
@@ -91,7 +84,12 @@ export default function TeamPage() {
     if (!supabase) return;
     if (!teamName.trim()) return;
 
-    const { data: t, error } = await supabase.from("teams").insert({ name: teamName.trim() }).select("*").single();
+    const { data: t, error } = await supabase
+      .from("teams")
+      .insert({ name: teamName.trim() })
+      .select("*")
+      .single();
+
     if (error) return alert(error.message);
 
     await supabase.from("team_members").insert({ team_id: t.id, user_id: user.id, role: "owner" });
@@ -136,15 +134,21 @@ export default function TeamPage() {
     alert("팀 가입 완료!");
   }
 
-  const supabaseReady = !!supabase;
+  if (!supabase) {
+    return (
+      <main style={{ maxWidth: 900, margin: "0 auto", padding: 24, fontFamily: "system-ui" }}>
+        <h1>🧑‍🤝‍🧑 Team / Login</h1>
+        <p style={{ opacity: 0.7 }}>Supabase 준비 중…</p>
+        <a href="/">Design</a>
+      </main>
+    );
+  }
 
   return (
     <main style={{ maxWidth: 900, margin: "0 auto", padding: 24, fontFamily: "system-ui" }}>
       <h1>🧑‍🤝‍🧑 Team / Login</h1>
 
-      {!supabaseReady ? (
-        <p style={{ opacity: 0.7 }}>Supabase 준비 중…</p>
-      ) : !user ? (
+      {!user ? (
         <section style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}>
           <h3>로그인</h3>
           <p style={{ opacity: 0.8 }}>이메일 OTP(매직 링크)로 로그인</p>
