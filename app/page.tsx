@@ -539,7 +539,7 @@ function DecisionSummary({
       <div style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>{tip}</div>
 
       <div style={{ marginTop: 10, fontSize: 11, opacity: 0.65 }}>
-        * 본 판정은 Barrowman 계열 근사 기반. (대회 발표에서 “근사 모델+반복 검증” 강조하면 점수 잘 나옴)
+        * 본 판정은 Barrowman 계열 근사 기반. 
       </div>
     </div>
   );

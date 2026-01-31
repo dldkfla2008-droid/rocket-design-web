@@ -51,7 +51,7 @@ export default function SimulatePage() {
     <main style={{ maxWidth: 900, margin: "0 auto", padding: 24 }}>
       <h1>🚀 Flight Simulation (1D)</h1>
       <p style={{ opacity: 0.8 }}>
-        추력곡선 기반 단순 수직 비행 시뮬레이션 (교육·설계 비교용 근사)
+        추력곡선 기반 단순 수직 비행 시뮬레이션 
       </p>
 
       <a href="/">← Design</a>
